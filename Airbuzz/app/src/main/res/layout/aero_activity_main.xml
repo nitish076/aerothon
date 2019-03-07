@@ -2,20 +2,90 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
-    <Button
-        android:id="@+id/input_btn"
+    <TextView
+        android:id="@+id/input_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Input Flight Details"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Input The details"
+        android:textColor="@color/Gold"
+        android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <TextView
+        android:id="@+id/model_a320"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/layout_bg"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Airbus A320"
+        android:textColor="@color/White"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/input_head" />
+
+    <TextView
+        android:id="@+id/model_a330"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/layout_bg"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Airbus A330"
+        android:textColor="@color/White"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/model_a320" />
+
+
+    <TextView
+        android:id="@+id/model_a350"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/layout_bg"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Airbus A350"
+        android:textColor="@color/White"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/model_a330" />
+
+    <TextView
+        android:id="@+id/search_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Search Info"
+        android:textColor="@color/Gold"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/model_a350" />
+
+    <TextView
         android:id="@+id/search_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/layout_bg"
+        android:gravity="center"
+        android:padding="10dp"
         android:text="Search Flight"
-        app:layout_constraintTop_toBottomOf="@+id/input_btn" />
+        android:textColor="@color/White"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/search_head" />
 
 </android.support.constraint.ConstraintLayout>

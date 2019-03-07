@@ -5,6 +5,16 @@ public class NewsModelClass {
     String headLines;
     String mainNews;
 
+    public NewsModelClass(){
+
+    }
+
+    public NewsModelClass(String means, String headLines,String mainNews){
+        this.means = means;
+        this.headLines = headLines;
+        this.mainNews =mainNews;
+    }
+
     public String getMeans() {
         return means;
     }

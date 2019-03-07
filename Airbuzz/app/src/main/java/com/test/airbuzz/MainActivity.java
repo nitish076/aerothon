@@ -9,7 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.test.airbuzz.Activities.AeroActivity;
+import com.test.airbuzz.models.NewsModelClass;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,13 +23,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView navalNewsHead,navalNewsBody,aeroNewsHead,aeroNewsBody,railNewsHead,railNewsBody,roadNewsHead,roadNewsBody;
-    RelativeLayout navalRL,aeroRL,railRL,roadRL;
+    TextView navalNewsHead, navalNewsBody, aeroNewsHead, aeroNewsBody, railNewsHead, railNewsBody, roadNewsHead, roadNewsBody;
+    RelativeLayout navalRL, aeroRL, railRL, roadRL;
 
-/*    RequestQueue queue = Volley.newRequestQueue(this);*/
+    List<NewsModelClass> modelClassList;
+    /*    RequestQueue queue = Volley.newRequestQueue(this);*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new GetDataTask().execute("http://192.168.43.250:8080/");
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
         initUI();
         initListeners();
 
-        new GetDataTask().execute("http://192.168.43.250:8080/");
+
     }
 
-    void initUI(){
+    void initUI() {
         navalNewsHead = findViewById(R.id.naval_news_head);
         navalNewsBody = findViewById(R.id.naval_news_body);
         aeroNewsHead = findViewById(R.id.aero_news_head);
@@ -51,45 +68,84 @@ public class MainActivity extends AppCompatActivity {
         roadRL = findViewById(R.id.road_rl);
     }
 
-    void initListeners(){
+    void initListeners() {
 
         aeroRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,AeroActivity.class);
+                Intent intent = new Intent(MainActivity.this, AeroActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        navalRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new GetDataTask().execute("http://192.168.43.250:8080/");
             }
         });
 
     }
 
-/*
+    /*
 
-    final String url = "http://httpbin.org/get?param1=hello";
+        final String url = "http://httpbin.org/get?param1=hello";
 
-    // prepare the Request
-    JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-            new Response.Listener<JSONObject>()
-            {
-                @Override
-                public void onResponse(JSONObject response) {
-                    // display response
-                    Log.d("Response", response.toString());
+        // prepare the Request
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // display response
+                        Log.d("Response", response.toString());
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", response);
+                    }
                 }
-            },
-            new Response.ErrorListener()
-            {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("Error.Response", response);
-                }
-            }
-    );
+        );
 
-// add it to the RequestQueue
-queue.add(getRequest);
+    // add it to the RequestQueue
+    queue.add(getRequest);
 
+    */
+    public void setTheData(String getResponse) throws JSONException {
+
+        /*JSONArray jsonarray = new JSONArray(getResponse);
+
+        for (int i = 0; i < jsonarray.length(); i++) {
+            JSONObject jsonobject = jsonarray.getJSONObject(i);
+            String means = jsonobject.getString("means");
+            String headLines = jsonobject.getString("headLines");
+            String mainNews = jsonobject.getString("mainNews");
+        }
 */
+        /*          String str = "[{\"name\":\"name1\",\"url\":\"url1\"},{\"name\":\"name2\",\"url\":\"url2\"}]";
+         */
+        modelClassList = new ArrayList<>();
+        JSONArray jsonarray = new JSONArray(getResponse);
+        for (int i = 0; i < jsonarray.length(); i++) {
+            JSONObject jsonobject = jsonarray.getJSONObject(i);
+            String means = jsonobject.getString("Means");
+            String headLines = jsonobject.getString("Headlines");
+            String mainNews = jsonobject.getString("MainNews");
+            modelClassList.add(new NewsModelClass(means, headLines, mainNews));
+        }
+
+        navalNewsHead.setText(modelClassList.get(0).getHeadLines());
+        navalNewsBody.setText(modelClassList.get(0).getMainNews());
+        aeroNewsHead.setText(modelClassList.get(1).getHeadLines());
+        aeroNewsBody.setText(modelClassList.get(1).getMainNews());
+        railNewsHead.setText(modelClassList.get(2).getHeadLines());
+        railNewsBody.setText(modelClassList.get(2).getMainNews());
+        roadNewsHead.setText(modelClassList.get(3).getHeadLines());
+        roadNewsBody.setText(modelClassList.get(3).getMainNews());
+    }
 
 
     class GetDataTask extends AsyncTask<String, Void, String> {
@@ -121,11 +177,15 @@ queue.add(getRequest);
             super.onPostExecute(result);
 
             //set data response to textView
+
+            try {
+                setTheData(result);
+            } catch (Exception e) {
+                Log.e("TAG-REsponseCOde", "Exception  Caougt", e);
+            }
             //mResult.setText(result);
-
-
-
             //cancel progress dialog
+
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
@@ -133,7 +193,7 @@ queue.add(getRequest);
 
         private String getData(String urlPath) throws IOException {
             StringBuilder result = new StringBuilder();
-            BufferedReader bufferedReader =null;
+            BufferedReader bufferedReader = null;
 
             try {
                 //Initialize and config request, then connect to server
@@ -147,7 +207,7 @@ queue.add(getRequest);
 
                 int status = urlConnection.getResponseCode();
 
-                Log.d("TAG-REsponseCOde",Integer.toString(status));
+                Log.d("TAG-REsponseCOde", Integer.toString(status));
 
                 //Read data response from server
                 InputStream inputStream = urlConnection.getInputStream();
@@ -163,7 +223,7 @@ queue.add(getRequest);
                 }
             }
 
-            Log.d("TAG this is result",result.toString());
+            Log.d("TAG this is result", result.toString());
             return result.toString();
         }
     }
