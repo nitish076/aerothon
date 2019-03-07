@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/model_a320"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Airbus A320"
+        android:layout_margin="35dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/model_a330"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Airbus A330"
+        android:layout_margin="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/model_a320"/>
+
+
+    <TextView
+        android:id="@+id/model_a350"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Airbus A350"
+        android:layout_margin="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/model_a330"/>
+
+</android.support.constraint.ConstraintLayout>
